@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-masthead: "UnifrakturMaguntia", "Newsreader", serif;
+    --font-serif: "Newsreader", Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-sans: "Libre Franklin", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    color: #121212;
+    background-color: #ffffff;
+  }
+}
+
+/* Custom Typography Helpers */
+.font-masthead {
+  font-family: var(--font-masthead);
+}
+
+.font-serif-nyt {
+  font-family: var(--font-serif);
+}
+
+.font-sans-nyt {
+  font-family: var(--font-sans);
+}
+
+/* Iconic Broadsheet Double Rule */
+.nyt-double-rule {
+  border-top: 3px solid #000000;
+  border-bottom: 1px solid #000000;
+  height: 5px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+/* Newspaper column divider */
+.nyt-col-divider {
+  border-right: 1px solid #e2e2e2;
+}
+
+/* Drop Cap Styling */
+.drop-cap::first-letter {
+  font-size: 3.75rem;
+  line-height: 1;
+  float: left;
+  margin-right: 0.5rem;
+  margin-top: 0.125rem;
+  font-weight: 700;
+  font-family: var(--font-serif);
+}
+
+/* Hide scrollbars for overflow rails */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

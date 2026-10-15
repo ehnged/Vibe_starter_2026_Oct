@@ -1,0 +1,8 @@
+{
+  "name": "The New York Times",
+  "description": "Breaking News, US News, World News, Multimedia, Opinion, Games, Wirecutter, and Cooking in classical broadsheet digital journalism.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
