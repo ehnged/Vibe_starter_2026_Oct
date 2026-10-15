@@ -1,19 +1,22 @@
 import React from 'react';
-import { Puzzle, Utensils, Sparkles } from 'lucide-react';
-import { ARTICLES } from '../data/articles';
+import { Puzzle, Utensils, Award } from 'lucide-react';
 
 interface EcosystemBarProps {
   onPlayWordle: () => void;
   onPlayConnections: () => void;
   onPlayMini: () => void;
-  onSelectArticle: (id: string) => void;
+  onPlaySpellingBee: () => void;
+  onOpenWirecutter: (productType: 'air-purifier' | 'robot-vacuum') => void;
+  onOpenCookingRecipe: () => void;
 }
 
 export const EcosystemBar: React.FC<EcosystemBarProps> = ({
   onPlayWordle,
   onPlayConnections,
   onPlayMini,
-  onSelectArticle
+  onPlaySpellingBee,
+  onOpenWirecutter,
+  onOpenCookingRecipe
 }) => {
   return (
     <section className="w-full bg-[#f7f7f7] border-t-2 border-b-2 border-black my-8 py-6 select-none">
@@ -85,7 +88,7 @@ export const EcosystemBar: React.FC<EcosystemBarProps> = ({
                   <span className="font-sans-nyt text-[11px] text-neutral-500">7 letter hives.</span>
                 </div>
                 <button
-                  onClick={onPlayWordle}
+                  onClick={onPlaySpellingBee}
                   className="bg-black text-white font-sans-nyt text-[10px] font-bold px-2.5 py-1 uppercase tracking-wider hover:bg-neutral-800 transition-colors"
                 >
                   PLAY
@@ -102,7 +105,7 @@ export const EcosystemBar: React.FC<EcosystemBarProps> = ({
             </div>
             <div className="space-y-2.5">
               <div
-                onClick={() => onSelectArticle('wirecutter-air-purifier')}
+                onClick={() => onOpenWirecutter('air-purifier')}
                 className="flex items-center space-x-3 p-2 bg-white border border-[#e2e2e2] hover:bg-neutral-50 transition-colors cursor-pointer"
               >
                 <img
@@ -119,7 +122,7 @@ export const EcosystemBar: React.FC<EcosystemBarProps> = ({
               </div>
 
               <div
-                onClick={() => onSelectArticle('wirecutter-robot-vacuums')}
+                onClick={() => onOpenWirecutter('robot-vacuum')}
                 className="flex items-center space-x-3 p-2 bg-white border border-[#e2e2e2] hover:bg-neutral-50 transition-colors cursor-pointer"
               >
                 <img
@@ -144,7 +147,7 @@ export const EcosystemBar: React.FC<EcosystemBarProps> = ({
               <h3 className="font-serif-nyt text-xl font-bold text-black">Cooking</h3>
             </div>
             <div
-              onClick={() => onSelectArticle('cooking-salmon')}
+              onClick={onOpenCookingRecipe}
               className="p-3 bg-white border border-[#e2e2e2] cursor-pointer hover:bg-neutral-50 transition-colors"
             >
               <img

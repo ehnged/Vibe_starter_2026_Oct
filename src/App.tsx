@@ -4,7 +4,9 @@ import {
   Bookmark,
   Share2,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Filter,
+  X
 } from 'lucide-react';
 import { Header } from './components/Header';
 import { EcosystemBar } from './components/EcosystemBar';
@@ -14,16 +16,22 @@ import { ArticleView } from './components/ArticleView';
 import { WordleModal } from './components/WordleModal';
 import { ConnectionsModal } from './components/ConnectionsModal';
 import { MiniCrosswordModal } from './components/MiniCrosswordModal';
+import { SpellingBeeModal } from './components/SpellingBeeModal';
 import { PollsModal } from './components/PollsModal';
 import { SearchModal } from './components/SearchModal';
 import { BookmarksDrawer } from './components/BookmarksDrawer';
 import { SubscribeModal } from './components/SubscribeModal';
 import { LoginModal } from './components/LoginModal';
+import { TodaysPaperModal } from './components/TodaysPaperModal';
+import { CookingRecipeModal } from './components/CookingRecipeModal';
+import { WirecutterModal } from './components/WirecutterModal';
+import { SportsBoxScoreModal } from './components/SportsBoxScoreModal';
 import { ARTICLES, Article } from './data/articles';
 
 export default function App() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>('U.S.');
+  const [currentEdition, setCurrentEdition] = useState<string>('U.S.');
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(['ai-dinner-party']);
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
@@ -31,11 +39,16 @@ export default function App() {
   const [isWordleOpen, setIsWordleOpen] = useState(false);
   const [isConnectionsOpen, setIsConnectionsOpen] = useState(false);
   const [isMiniOpen, setIsMiniOpen] = useState(false);
+  const [isSpellingBeeOpen, setIsSpellingBeeOpen] = useState(false);
   const [isPollsOpen, setIsPollsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isTodaysPaperOpen, setIsTodaysPaperOpen] = useState(false);
+  const [isCookingRecipeOpen, setIsCookingRecipeOpen] = useState(false);
+  const [wirecutterProduct, setWirecutterProduct] = useState<'air-purifier' | 'robot-vacuum' | null>(null);
+  const [isSportsBoxScoreOpen, setIsSportsBoxScoreOpen] = useState(false);
 
   const toggleBookmark = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -50,8 +63,27 @@ export default function App() {
   };
 
   const handleSelectTrending = (topic: string) => {
-    // Navigate or search for topic
     setIsSearchOpen(true);
+  };
+
+  const handleSectionNav = (sec: string) => {
+    if (sec === 'Cooking') {
+      setIsCookingRecipeOpen(true);
+      return;
+    }
+    if (sec === 'Games') {
+      setIsWordleOpen(true);
+      return;
+    }
+    if (sec === 'Wirecutter') {
+      setWirecutterProduct('air-purifier');
+      return;
+    }
+    if (sec === 'The Athletic' || sec === 'Sports') {
+      setIsSportsBoxScoreOpen(true);
+      return;
+    }
+    setActiveSection(sec);
   };
 
   const currentArticle = selectedArticleId ? ARTICLES[selectedArticleId] : null;
@@ -70,7 +102,7 @@ export default function App() {
         <Footer
           onGoHome={() => setSelectedArticleId(null)}
           onSelectSection={(sec) => {
-            setActiveSection(sec);
+            handleSectionNav(sec);
             setSelectedArticleId(null);
           }}
           onOpenSubscribe={() => setIsSubscribeOpen(true)}
@@ -93,12 +125,32 @@ export default function App() {
         onOpenSubscribe={() => setIsSubscribeOpen(true)}
         onOpenLogin={() => setIsLoginOpen(true)}
         onOpenBookmarks={() => setIsBookmarksOpen(true)}
+        onOpenTodaysPaper={() => setIsTodaysPaperOpen(true)}
         savedCount={bookmarkedIds.length}
         userEmail={userEmail}
         activeSection={activeSection}
-        onSelectSection={(sec) => setActiveSection(sec)}
+        onSelectSection={handleSectionNav}
         onSelectTrending={handleSelectTrending}
+        currentEdition={currentEdition}
+        onChangeEdition={(ed) => setCurrentEdition(ed)}
       />
+
+      {/* Optional Desk Filter Active Banner */}
+      {activeSection !== 'U.S.' && (
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-2 border-b border-[#e2e2e2] flex items-center justify-between text-xs font-sans-nyt bg-neutral-50">
+          <div className="flex items-center space-x-2">
+            <Filter className="w-3.5 h-3.5 text-neutral-500" />
+            <span>Viewing coverage curated by the <strong>{activeSection}</strong> desk</span>
+          </div>
+          <button
+            onClick={() => setActiveSection('U.S.')}
+            className="flex items-center space-x-1 text-neutral-600 hover:text-black font-semibold uppercase text-[11px]"
+          >
+            <span>Back to All Desks</span>
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* 2. MAIN EDITORIAL NEWSPAPER GRID (3-Column Broadsheet System) */}
       <main className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-4 bg-white">
@@ -502,7 +554,7 @@ export default function App() {
                 <span className="font-sans-nyt text-[11px] text-neutral-500">• NLCS GAME 3</span>
               </div>
               <h3
-                onClick={() => handleSelectArticle('brewers-dodgers')}
+                onClick={() => setIsSportsBoxScoreOpen(true)}
                 className="font-serif-nyt text-[16px] font-bold text-black leading-[20px] hover:text-neutral-700 cursor-pointer"
               >
                 Brewers Lead Dodgers in Game 3 of N.L. Championship Series
@@ -517,7 +569,12 @@ export default function App() {
                 >
                   Shohei Ohtani Insists He Can Play ›
                 </button>
-                <span className="font-bold text-neutral-700">Live Box Score</span>
+                <button
+                  onClick={() => setIsSportsBoxScoreOpen(true)}
+                  className="font-bold text-neutral-700 hover:text-black underline"
+                >
+                  Live Box Score
+                </button>
               </div>
             </article>
 
@@ -625,7 +682,9 @@ export default function App() {
         onPlayWordle={() => setIsWordleOpen(true)}
         onPlayConnections={() => setIsConnectionsOpen(true)}
         onPlayMini={() => setIsMiniOpen(true)}
-        onSelectArticle={handleSelectArticle}
+        onPlaySpellingBee={() => setIsSpellingBeeOpen(true)}
+        onOpenWirecutter={(productType) => setWirecutterProduct(productType)}
+        onOpenCookingRecipe={() => setIsCookingRecipeOpen(true)}
       />
 
       {/* 4. THE MORNING NEWSLETTER CALLOUT */}
@@ -639,7 +698,7 @@ export default function App() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onSelectSection={(sec) => {
-          setActiveSection(sec);
+          handleSectionNav(sec);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onOpenSubscribe={() => setIsSubscribeOpen(true)}
@@ -649,6 +708,7 @@ export default function App() {
       <WordleModal isOpen={isWordleOpen} onClose={() => setIsWordleOpen(false)} />
       <ConnectionsModal isOpen={isConnectionsOpen} onClose={() => setIsConnectionsOpen(false)} />
       <MiniCrosswordModal isOpen={isMiniOpen} onClose={() => setIsMiniOpen(false)} />
+      <SpellingBeeModal isOpen={isSpellingBeeOpen} onClose={() => setIsSpellingBeeOpen(false)} />
       <PollsModal isOpen={isPollsOpen} onClose={() => setIsPollsOpen(false)} />
       <SearchModal
         isOpen={isSearchOpen}
@@ -671,6 +731,24 @@ export default function App() {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onLoggedIn={(email) => setUserEmail(email)}
+      />
+      <TodaysPaperModal
+        isOpen={isTodaysPaperOpen}
+        onClose={() => setIsTodaysPaperOpen(false)}
+        onSelectArticle={handleSelectArticle}
+      />
+      <CookingRecipeModal
+        isOpen={isCookingRecipeOpen}
+        onClose={() => setIsCookingRecipeOpen(false)}
+      />
+      <WirecutterModal
+        isOpen={wirecutterProduct !== null}
+        onClose={() => setWirecutterProduct(null)}
+        productType={wirecutterProduct || 'air-purifier'}
+      />
+      <SportsBoxScoreModal
+        isOpen={isSportsBoxScoreOpen}
+        onClose={() => setIsSportsBoxScoreOpen(false)}
       />
     </div>
   );
